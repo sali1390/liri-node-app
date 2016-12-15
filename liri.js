@@ -8,10 +8,9 @@ if (command === "my-tweets"){
     spotifySong()
 } else if (command === "movie-this"){
     movieThis();
-} 
-//    else (command === "do-what-it-says"){
-//    doWhatever();
-//}
+} else if (command === "do-what-it-says"){
+    doWhatever();
+}
 
 function displayTweets(){
     var twitterKeys = require('./keys.js');
@@ -34,7 +33,17 @@ function displayTweets(){
 function spotifySong(){
     var spotify = require('spotify');
     
-    var song = process.argv[3];
+    var songInput = process.argv;
+    var songArr = [];
+    
+    for (var i=3; i < songInput.length; i++){
+        songArr.push(songInput[i]);
+    }
+    
+    //converts the movie array to a string that we can use
+    var song = songArr.join().split(',').join(' ');
+    
+//    console.log(song);
  
     spotify.search({ type: 'track', query: song }, function(err, data) {
         if ( err ) {
@@ -69,6 +78,8 @@ function movieThis(){
     //converts the movie array to a string that we can use
     var movie = movieArr.join().split(',').join('+');
     
+//    console.log(movie);
+    
     var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&r=json&tomatoes=true";
     
     request(queryUrl, function (error, response, body) {
@@ -86,6 +97,6 @@ function movieThis(){
     })
 };
 
-//function doWhatever(){
-//    
-//};
+function doWhatever(){
+    
+};
