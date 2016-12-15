@@ -53,7 +53,7 @@ function spotifySong(){
             } else{
                 var songData = JSON.stringify(data, null, 2);
                 
-//                console.log(songData);
+                console.log(songData);
 
                 var songName = data.tracks.items[6].name;
                 var songArtist = data.tracks.items[6].album.artists[0].name;
@@ -146,10 +146,33 @@ function doWhatever(){
     fs.readFile('random.txt', 'utf8', function (err,data) {
         if (err) {
             return console.log(err);
-        }
-        
-        console.log(data);
-        
-        
+        } else { 
+            var commandArr = data.split(', ');
+            
+            var song = commandArr[1];
+            
+            var spotify = require('spotify');
+            
+            spotify.search({ type: 'track', query: song }, function(err, data) {
+                if ( err ) {
+                    console.log('Error occurred: ' + err);
+                    return;
+                } else{
+                    var songData = JSON.stringify(data, null, 2);
+
+                    console.log(songData);
+
+                    var songName = data.tracks.items[0].name;
+                    var songArtist = data.tracks.items[0].album.artists[0].name;
+                    var albumName =  data.tracks.items[0].album.name;
+                    var previewLink = data.tracks.items[0].artists[0].external_urls.spotify;
+
+                    console.log('Name: ' + songName);
+                    console.log('Artist: ' + songArtist);
+                    console.log('Album: ' + albumName);
+                    console.log('Preview: ' + previewLink);
+                }
+            });
+        };
     });  
 };
