@@ -41,28 +41,53 @@ function spotifySong(){
     }
     
     //converts the movie array to a string that we can use
-    var song = songArr.join().split(',').join(' ');
-    
-//    console.log(song);
- 
-    spotify.search({ type: 'track', query: song }, function(err, data) {
-        if ( err ) {
-            console.log('Error occurred: ' + err);
-            return;
-        } else{
-            var songData = JSON.stringify(data, null, 2);
-            
-            var songName = data.tracks.items[0].name;
-            var songArtist = data.tracks.items[0].album.artists[0].name;
-            var albumName =  data.tracks.items[0].album.name;
-            var previewLink = data.tracks.items[0].artists[0].external_urls.spotify;
-            
-            console.log('Name: ' + songName);
-            console.log('Artist: ' + songArtist);
-            console.log('Album: ' + albumName);
-            console.log('Preview: ' + previewLink);
-        }
-    });
+    if (songArr.length === 0) {
+        var song = "The Sign";
+        
+        console.log(song);
+        
+        spotify.search({ type: 'track', query: song }, function(err, data) {
+            if ( err ) {
+                console.log('Error occurred: ' + err);
+                return;
+            } else{
+                var songData = JSON.stringify(data, null, 2);
+                
+//                console.log(songData);
+
+                var songName = data.tracks.items[6].name;
+                var songArtist = data.tracks.items[6].album.artists[0].name;
+                var albumName =  data.tracks.items[6].album.name;
+                var previewLink = data.tracks.items[6].artists[0].external_urls.spotify;
+
+                console.log('Name: ' + songName);
+                console.log('Artist: ' + songArtist);
+                console.log('Album: ' + albumName);
+                console.log('Preview: ' + previewLink);
+            }
+        });   
+    } else {
+        var song = songArr.join().split(',').join(' ');
+        
+        spotify.search({ type: 'track', query: song }, function(err, data) {
+            if ( err ) {
+                console.log('Error occurred: ' + err);
+                return;
+            } else{
+                var songData = JSON.stringify(data, null, 2);
+
+                var songName = data.tracks.items[0].name;
+                var songArtist = data.tracks.items[0].album.artists[0].name;
+                var albumName =  data.tracks.items[0].album.name;
+                var previewLink = data.tracks.items[0].artists[0].external_urls.spotify;
+
+                console.log('Name: ' + songName);
+                console.log('Artist: ' + songArtist);
+                console.log('Album: ' + albumName);
+                console.log('Preview: ' + previewLink);
+            }
+        });   
+    }
 };
 
 function movieThis(){
@@ -75,28 +100,56 @@ function movieThis(){
         movieArr.push(movieInput[i]);
     }
     
-    //converts the movie array to a string that we can use
-    var movie = movieArr.join().split(',').join('+');
+    if (movieArr.length === 0) {
+        var movie = "Mr.Nobody";
+        
+        var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&r=json&tomatoes=true";
     
-//    console.log(movie);
+        request(queryUrl, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                console.log('Title: ' + JSON.parse(body).Title);
+                console.log('Year Released: ' + JSON.parse(body).Year);
+                console.log('IMDB Rating: ' + JSON.parse(body).imdbRating);
+                console.log('Country: ' + JSON.parse(body).Country);
+                console.log('Language: ' + JSON.parse(body).Language);
+                console.log('Plot: ' + JSON.parse(body).Plot);
+                console.log('Actors: ' + JSON.parse(body).Actors);
+                console.log('Rotten Tomatoes Rating: ' + JSON.parse(body).tomatoRating);
+                console.log('Rotten Tomatoes URL: ' + JSON.parse(body).tomatoURL);
+            }
+        });
+    } else {
     
-    var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&r=json&tomatoes=true";
-    
-    request(queryUrl, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            console.log('Title: ' + JSON.parse(body).Title);
-            console.log('Year Released: ' + JSON.parse(body).Year);
-            console.log('IMDB Rating: ' + JSON.parse(body).imdbRating);
-            console.log('Country: ' + JSON.parse(body).Country);
-            console.log('Language: ' + JSON.parse(body).Language);
-            console.log('Plot: ' + JSON.parse(body).Plot);
-            console.log('Actors: ' + JSON.parse(body).Actors);
-            console.log('Rotten Tomatoes Rating: ' + JSON.parse(body).tomatoRating);
-            console.log('Rotten Tomatoes URL: ' + JSON.parse(body).tomatoURL);
-        }
-    })
+        //converts the movie array to a string that we can use
+        var movie = movieArr.join().split(',').join('+');
+
+        var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&r=json&tomatoes=true";
+
+        request(queryUrl, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                console.log('Title: ' + JSON.parse(body).Title);
+                console.log('Year Released: ' + JSON.parse(body).Year);
+                console.log('IMDB Rating: ' + JSON.parse(body).imdbRating);
+                console.log('Country: ' + JSON.parse(body).Country);
+                console.log('Language: ' + JSON.parse(body).Language);
+                console.log('Plot: ' + JSON.parse(body).Plot);
+                console.log('Actors: ' + JSON.parse(body).Actors);
+                console.log('Rotten Tomatoes Rating: ' + JSON.parse(body).tomatoRating);
+                console.log('Rotten Tomatoes URL: ' + JSON.parse(body).tomatoURL);
+            }
+        })
+    }
 };
 
 function doWhatever(){
-    
+    var fs = require('fs')
+    fs.readFile('random.txt', 'utf8', function (err,data) {
+        if (err) {
+            return console.log(err);
+        }
+        
+        console.log(data);
+        
+        
+    });  
 };
